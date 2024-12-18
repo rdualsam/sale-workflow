@@ -50,6 +50,10 @@ To configure this module you need to:
 #. Create a new record.
 #. Set a product linked to the elaboration.
 #. Also you can select a route to procure this elaboration.
+#. Go to *Settings > Inventory > Traceability* and select *Display Elaboration
+   notes on Delivery Slips* if you want to show elaborations on Delivery Slips
+   or *Display Elaboration notes on Picking Operations* if you want to show
+   elaborations on Picking Operations.
 
 Usage
 =====
@@ -60,6 +64,7 @@ Usage
 #. Select an elaboration in the line.
 #. Confirm the sales order.
 #. Go to the picking created by this sales order and validate it.
+#. Print Delivery Slip and Picking Operations.
 #. Go back to the sales order. A new line is created with the product linked to
    the elaboration.
 
