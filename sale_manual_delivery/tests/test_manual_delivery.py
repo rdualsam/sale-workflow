@@ -16,7 +16,7 @@ class TestSaleStock(TestSaleCommonBase):
         self.product2 = self.env.ref("product.product_delivery_02")
         self.product3 = self.env.ref("product.product_order_01")
         self.carrier1 = self.env.ref("delivery.delivery_carrier")
-        self.carrier2 = self.env.ref("delivery.normal_delivery_carrier")
+        self.carrier2 = self.env.ref("delivery.delivery_local_delivery")
         self.stock_location = self.env.ref("stock.stock_location_stock")
         self.env["stock.quant"]._update_available_quantity(
             self.product, self.stock_location, 100
@@ -56,7 +56,6 @@ class TestSaleStock(TestSaleCommonBase):
                         },
                     )
                 ],
-                "pricelist_id": self.env.ref("product.list0").id,
                 "manual_delivery": True,
             }
         )
@@ -110,7 +109,6 @@ class TestSaleStock(TestSaleCommonBase):
                         },
                     )
                 ],
-                "pricelist_id": self.env.ref("product.list0").id,
                 "manual_delivery": False,
             }
         )
@@ -123,7 +121,7 @@ class TestSaleStock(TestSaleCommonBase):
         # deliver completely
         pick = order.picking_ids
         pick.action_assign()
-        pick.move_line_ids.write({"qty_done": 5})
+        pick.move_line_ids.write({"quantity": 5})
         pick.button_validate()
         # Check quantity delivered
         del_qty = sum(sol.qty_delivered for sol in order.order_line)
@@ -151,7 +149,6 @@ class TestSaleStock(TestSaleCommonBase):
                         },
                     )
                 ],
-                "pricelist_id": self.env.ref("product.list0").id,
                 "manual_delivery": True,
             }
         )
@@ -176,7 +173,7 @@ class TestSaleStock(TestSaleCommonBase):
         # deliver completely
         pick = order.picking_ids
         pick.action_assign()
-        pick.move_line_ids.write({"qty_done": 2})
+        pick.move_line_ids.write({"quantity": 2})
         pick.button_validate()
         # Check quantity delivered
         del_qty = sum(sol.qty_delivered for sol in order.order_line)
@@ -229,7 +226,6 @@ class TestSaleStock(TestSaleCommonBase):
                         },
                     )
                 ],
-                "pricelist_id": self.env.ref("product.list0").id,
                 "manual_delivery": True,
             }
         )
@@ -251,7 +247,6 @@ class TestSaleStock(TestSaleCommonBase):
                         },
                     )
                 ],
-                "pricelist_id": self.env.ref("product.list0").id,
                 "manual_delivery": True,
             }
         )
@@ -273,7 +268,6 @@ class TestSaleStock(TestSaleCommonBase):
                         },
                     )
                 ],
-                "pricelist_id": self.env.ref("product.list0").id,
                 "manual_delivery": True,
             }
         )
@@ -293,7 +287,7 @@ class TestSaleStock(TestSaleCommonBase):
             'Picking should be created after "manual delivery" wizard call',
         )
         self.assertEqual(
-            len(order3.picking_ids.move_lines),
+            len(order3.picking_ids.move_ids),
             1,
             "Different sales orders should still create different pickings",
         )
@@ -348,7 +342,6 @@ class TestSaleStock(TestSaleCommonBase):
                         },
                     ),
                 ],
-                "pricelist_id": self.env.ref("product.list0").id,
                 "manual_delivery": True,
             }
         )
@@ -416,7 +409,7 @@ class TestSaleStock(TestSaleCommonBase):
             ' after "manual delivery" wizard call with same date',
         )
         self.assertEqual(
-            sum(first_picking.mapped("move_lines.product_uom_qty")),
+            sum(first_picking.mapped("move_ids.product_uom_qty")),
             7,
         )
 
@@ -453,7 +446,6 @@ class TestSaleStock(TestSaleCommonBase):
                         },
                     ),
                 ],
-                "pricelist_id": self.env.ref("product.list0").id,
                 "manual_delivery": True,
             }
         )
@@ -485,7 +477,6 @@ class TestSaleStock(TestSaleCommonBase):
                         },
                     ),
                 ],
-                "pricelist_id": self.env.ref("product.list0").id,
                 "manual_delivery": True,
                 "carrier_id": self.carrier1.id,
             }

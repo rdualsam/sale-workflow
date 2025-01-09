@@ -1,18 +1,18 @@
-def pre_init_hook(cr):
-    cr.execute(
+def pre_init_hook(env):
+    env.cr.execute(
         """
         ALTER TABLE sale_order_line ADD COLUMN IF NOT EXISTS qty_procured numeric;
         COMMENT ON COLUMN sale_order_line.qty_procured IS 'Quantity Procured';
         """
     )
-    cr.execute(
+    env.cr.execute(
         """
         ALTER TABLE sale_order_line ADD COLUMN IF NOT EXISTS qty_to_procure numeric;
         COMMENT ON COLUMN sale_order_line.qty_to_procure IS 'Quantity to Procure"';
         """
     )
 
-    cr.execute(
+    env.cr.execute(
         """
 update sale_order_line as sol set qty_procured = r.qty_procured,
 qty_to_procure = sol.product_uom_qty - r.qty_procured

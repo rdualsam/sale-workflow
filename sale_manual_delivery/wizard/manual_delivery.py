@@ -58,13 +58,9 @@ class ManualDelivery(models.TransientModel):
     partner_id = fields.Many2one(
         "res.partner",
         string="Delivery Address",
-        domain="""
-            [
-                "|",
-                ("id", "=", commercial_partner_id),
-                ("parent_id", "=", commercial_partner_id),
-            ],
-        """,
+        domain="['|',"
+        "('id', '=', commercial_partner_id),"
+        "('parent_id', '=', commercial_partner_id)]",
         ondelete="cascade",
     )
     carrier_id = fields.Many2one(
@@ -73,7 +69,7 @@ class ManualDelivery(models.TransientModel):
         ondelete="cascade",
     )
     route_id = fields.Many2one(
-        "stock.location.route",
+        "stock.route",
         string="Use specific Route",
         domain=[("sale_selectable", "=", True)],
         ondelete="cascade",
@@ -84,7 +80,7 @@ class ManualDelivery(models.TransientModel):
         "manual_delivery_id",
         string="Lines to validate",
     )
-    date_planned = fields.Datetime(string="Date Planned")
+    date_planned = fields.Datetime()
 
     def confirm(self):
         """Creates the manual procurements"""
